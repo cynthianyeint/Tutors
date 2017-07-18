@@ -1,0 +1,40 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block main %}
+<div class="row" style="margin-top:10%">
+
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        <h2 class="page-header"><i class="fa fa-user"></i> User Login</h2>
+        {% if message %}
+        <label style="color:#BE4F42">{{ message }}</label>
+        {% endif %}
+        <form action="{% url 'user-login' %}" method="post">{% csrf_token %}
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form.email|bootstrap_inline }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form.password|bootstrap_inline }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary " type="submit" style="margin:15px 0px; width: 120px">
+                        <i class="fa fa-sign-in"></i> Login
+                    </button>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+    
+    
+    <div class="col-md-1"></div>
+</div>
+</div>
+{% endblock %}

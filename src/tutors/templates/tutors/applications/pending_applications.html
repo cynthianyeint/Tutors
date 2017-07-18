@@ -1,0 +1,88 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load has_group %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="top-session">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div id="course">
+                            {% if user.get_pending_applications %}
+                                <h2><i class="fa fa-file-text"></i> Pending Applications</h2>
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Application ID</th>
+                                            <th>Course</th>
+                                            <th>Category</th>
+                                            {% if request.user|has_group:"Teacher" %}
+                                                <th>Applicant Name</th>
+                                                <th>Applicant Email</th>
+                                            {% else %}
+                                                <th>Teacher Name</th>
+                                                <th>Teacher Email</th>
+                                            {% endif %}
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    {% for p in user.get_pending_applications %}
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ p.id }}</td>
+                                                <td>{{ p.course.title }}</td>
+                                                <td>{{ p.course.category }}</td>
+                                                {% if request.user|has_group:"Teacher" %}
+                                                    <td><a href="{% url 'student-view' p.student.id %}">{{ p.student }}</a> </td>
+                                                    <td>{{ p.student.email }}</td>
+                                                {% else %}
+                                                    <td><a href="{% url 'teacher-view' p.teacher.id %}">{{ p.teacher }}</a> </td>
+                                                    <td>{{ p.teacher.email }}</td>
+                                                {% endif %}
+                                                <td>
+                                                    <div class="icon" for="{{ p.id }}">
+                                                        {% if request.user|has_group:"Teacher" %}
+                                                            <a href="#" class="btn btn-sm btn-warning confirm-application" data-id="{{ p.id }}"><i class="fa fa-check"></i> Confirm</a>
+                                                            <a href="#" class="btn btn-sm btn-danger reject-application" data-id="{{ p.id }}"><i class="fa fa-times"></i> Reject</a>
+                                                        {% else %}
+                                                            <a href="#" class="btn btn-sm btn-danger cancel-application" data-id="{{ p.id }}"><i class="fa fa-times"></i> Cancel</a>
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    {% endfor %}
+                                </table>
+                            {% else %}
+                                <h2><i class="fa fa-exclamation-triangle"></i> There is no pending applications.</h2>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="applicationModal" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Confirm</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="btnYes">Yes</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

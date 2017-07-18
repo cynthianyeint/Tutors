@@ -1,0 +1,130 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block title %}Profile{% endblock %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="top-session">
+                <div class="row">
+                    <div class="col-md-2" style="margin-top: 10px;">
+                        {% if teacher.avatar_url %}
+                            <img src="{{ teacher.avatar_url }}" width="140px" height="140px">
+                        {% else %}
+                            <img src="/static/img/user_profile.jpg">
+                        {% endif %}
+                        <div style="color:#00b2d6; margin: 5px;"> No. of Classes: {{ total_course }}</div>
+                        <div style="color:#00b2d6; margin: 5px;"> No. of Students: {{ total_students }}</div>
+                        <div style="color:#00b2b6; margin: 5px;"> Pending Applications: {{ teacher.get_pending_applications.count }}</div>
+                    </div>
+                    <div class="col-md-10" style="margin-top: 10px;">
+                        <ul class="nav nav-tabs">
+                            <li {% ifequal active_tab "profile" %}class="active" {% endifequal %}><a href="#profile" data-toggle="tab">Profile Overview</a> </li>
+                            <li {% ifequal active_tab "course" %}class="active"{% endifequal %}><a href="#course" data-toggle="tab">Course Overview</a> </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane {% ifequal active_tab "profile" %}active{% endifequal %}" id="profile">
+                                <h2><i class="fa fa-user"></i> Profile Overview</h2>
+                                <a href="{% url 'teacher-profile-edit' teacher.id %}" class="btn btn-warning a-btn"><i class="fa fa-pencil"></i> Edit Profile</a>
+                                <a href="{% url 'teacher-password-edit' teacher.user_id %}" class="btn btn-danger a-btn"><i class="fa fa-pencil"></i> Edit Password</a>
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td><b>Full Name:</b></td>
+                                        <td>{{ teacher }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Nick Name:</b></td>
+                                        <td>{{ teacher.get_nickname }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>User Name:</b></td>
+                                        <td>{{ teacher.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Email:</b></td>
+                                        <td>{{ teacher.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Date of Birth: </b></td>
+                                        <td>{{ teacher.dob }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Phone Number: </b></td>
+                                        <td>{{ teacher.get_phone_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Website: </b></td>
+                                        <td>{{ teacher.get_website|urlize  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Biography:</b></td>
+                                        <td>{{ teacher.biography }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane {% ifequal active_tab "course" %}active{% endifequal %}" id="course">
+                                <h2><i class="fa fa-book"></i> Course Overview</h2>
+                                <a href="{% url 'add-course' %}?next={{ request.path }}" class="btn btn-warning a-btn"><i class="fa fa-plus"></i> Add Course</a>
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Course Title</th>
+                                            <th>Category</th>
+                                            <th>Schedule</th>
+                                            <th>No. of Students</th>
+                                            <th>Published</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for course in course_list %}
+                                    <tr>
+                                        <td><a href="{% url 'course-details' course.id %}">{{ course.title }}</a></td>
+                                        <td>{{ course.category }}</td>
+                                        <td>
+                                            {% if course.get_class_schedule %}
+                                                {% for o in course.get_class_schedule %}
+                                                    {% if course.weekly_class_event %}
+                                                        {{ o.start_time|date:"l" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                                                    {% else %}
+                                                        {% if o.start_time.date == o.end_time.date %}
+                                                            {{ o.start_time|date:"j.m.y" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                                                        {% else %}
+                                                            {{ o.start_time|date:"j.m.y" }}({{ o.start_time|date:"P" }}) - {{ o.end_time|date:"j.m.y" }}({{ o.end_time|date:"P" }})<br>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ course.total_no_of_students }}</td>
+                                        <td>
+                                            {% if course.published %}
+                                                <i class="fa fa-check"></i>
+                                            {% else %}
+                                                <i class="fa fa-close"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-thumbs-up text-primary"></i><span>{{ course.recommendation.count }}</span>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'edit-course' course.id %}" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i> Edit</a>
+                                            <a href="{% url 'delete-course' course.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

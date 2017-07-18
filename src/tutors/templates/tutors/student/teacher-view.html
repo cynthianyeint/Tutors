@@ -1,0 +1,97 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block main %}
+<div class="row">
+    <h1 class="page-header" style="padding: 10px;">{{ teacher }}</h1>
+    <div class="col-md-2">
+        {% if teacher.avatar_url %}
+            <img src="{{ teacher.avatar_url }}" width="140px" height="140px">
+        {% else %}
+            <img src="/static/img/user_profile.jpg">
+        {% endif %}
+    </div>
+    <div class="col-md-10">
+        {% if teacher.biography %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h2><i class="fa fa-user-secret"></i> Biography</h2>
+                    {{ teacher.biography }}
+                </div>
+            </div>
+        {% endif %}
+        <h2><i class="fa fa-user"></i> Profile Overview</h2>
+        <table class="table table-borderless">
+            <tr>
+                <td><b>Full Name:</b></td>
+                <td>{{ teacher }}</td>
+            </tr>
+            <tr>
+                <td><b>Nick Name:</b></td>
+                <td>{{ teacher.get_nickname }}</td>
+            </tr>
+            <tr>
+                <td><b>Date of Birth:</b></td>
+                <td>{{ teacher.dob }}</td>
+            </tr>
+            <tr>
+                <td><b>Phone Number:</b></td>
+                <td>{{ teacher.get_phone_number }}</td>
+            </tr>
+            <tr>
+                <td><b>Email:</b></td>
+                <td>{{ teacher.email }}</td>
+            </tr>
+            <tr>
+                <td><b>Website:</b></td>
+                <td>{{ teacher.get_website|urlize  }}</td>
+            </tr>
+        </table>
+
+        <h2><i class="fa fa-book"></i> List of Courses</h2>
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Schedule</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for c in teacher.class_set.all %}
+                <tr>
+                    <td>
+                        {{ c.title }}
+                    </td>
+                    <td>
+                        {{ c.category }}
+                    </td>
+                    <td>
+                        {% if c.get_class_schedule %}
+                            {% for o in c.get_class_schedule %}
+                                {% if c.weekly_class_event %}
+                                    {{ o.start_time|date:"l" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                                {% else %}
+                                    {% if o.start_time.date == o.end_time.date %}
+                                        {{ o.start_time|date:"j.m.y" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                                    {% else %}
+                                        {{ o.start_time|date:"j.m.y" }}({{ o.start_time|date:"P" }}) - {{ o.end_time|date:"j.m.y" }}({{ o.end_time|date:"P" }})<br>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <i class="fa fa-thumbs-up text-primary"></i><span>{{ c.recommendation.count }}</span>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

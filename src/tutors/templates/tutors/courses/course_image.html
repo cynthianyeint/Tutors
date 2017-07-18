@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-lg-12">
+        {% if img_list %}
+            <div id="lightgallery">
+            {% for img in img_list %}
+                <a href="{{ img.images.url }}">
+                  <img src="{{ img.images.url }}" class="course-img img-thumbnail"/>
+                </a>
+            {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

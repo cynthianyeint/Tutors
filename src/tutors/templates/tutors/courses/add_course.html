@@ -1,0 +1,100 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <h1 class="page-header"><i class="fa fa-{{title_icon}}-o"></i> {{title_text}}</h1>
+
+            <form action="" method="POST" enctype="multipart/form-data" >{% csrf_token %}
+                <div class="row">
+                    <div class="col-md-8">
+                        {{ course_form.title|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        {{ course_form.category|bootstrap }}
+                    </div>
+                </div>
+
+{#                <div class="row ">#}
+{#                    <div class="col-md-8">#}
+{#                    <label class="form-group">Course Time Slot</label> <br>#}
+{##}
+{#                        <div class='table' id="time_slot_table1">#}
+{#                            <div class="form-group">#}
+{#                                <div class="row">#}
+{#    #}
+{#                                    <div class="col-md-3" >#}
+{#                                        {{ timeslot_form.int_day|bootstrap }}#}
+{#                                    </div>#}
+{#    #}
+{#                                    <div class="col-md-3">#}
+{#                                      {{ timeslot_form.from_time|bootstrap }}#}
+{#                                    </div>#}
+{#    #}
+{#                                    <div class="col-md-3">#}
+{#                                       {{ timeslot_form.to_time|bootstrap }}#}
+{#                                    </div>#}
+{#    #}
+{#                                    <div class="col-md-3" style="margin-top: 12px;">#}
+{#                                        <button id="add_new" class="btn btn-link" type="button"><i class="fa fa-plus"></i> Add</button>#}
+{#                                        <button id="delete_new" class="btn btn-link" type="button"><i class="fa fa-trash"></i> Delete</button>#}
+{#                                    </div>#}
+{#    #}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{##}
+{#                    </div>#}
+{#                </div>#}
+
+
+                <div class="row">
+                    <div class="col-md-8">
+                        {{ course_form.description|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        {{ course_form.youtube_link|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        {{ course_form.published|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+{#                        <input type="file" name="files" accept="image/jpg, image/jpeg"  multiple />#}
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                            {{ form }}
+                        {% endfor %}
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary" style="width: 120px"><i class="fa fa-floppy-o"></i> Save</button>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+    <div>
+        <input type="hidden" name="existing_time_slot_count" id="existing_time_slot_count" value="{{existing_time_slot_count}}" />
+        <input type="hidden" name="exist_time_slot" id="exist_time_slot" value="{{exist_time_slot}}" />
+    </div>
+{% endblock %}
+
+

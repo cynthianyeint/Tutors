@@ -1,0 +1,37 @@
+{% extends 'tutors/courses/base.html' %}
+{#{% extends "tutors/base.html" %}#}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block title %}Add Course Schedule{% endblock %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+
+    {{ block.super }}
+    {% breadcrumb "Monthly" "monthly-calendar" course_id current_datetime.year current_datetime.month %}
+    {% breadcrumb "Daily Calendar" "daily-calendar" course_id dtstart.year dtstart.month dtstart.day %}
+    {% breadcrumb "Add Schedule" "" %}
+{% endblock %}
+
+{% block main %} {{ course.id }}
+    <h3>Add Event</h3>
+    {{ event_form.non_field_errors }}
+    {{ recurring_form.non_field_errors }}
+    {% if event_form.errors or recurrence_form.errors %}
+    <p class="form-errors">Please fix any errors.</p>
+    {% endif %}
+    <form method="post" action="" class="event_form">{% csrf_token %}
+    <table class="table table-bordered">
+        <tfoot>
+            <tr>
+                <td colspan="2"><input type="submit" value="Add" /></td>
+            </tr>
+        </tfoot>
+        <tbody>
+        {% include "swingtime/event_form_part.html" %}
+        {% include "swingtime/recurring_form_part.html" %}
+        </tbody>
+    </table>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'tutors/base.html' %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+{#    {{ block.super }}#}
+    {% clear_breadcrumbs %}
+    {% breadcrumb "Course Details" "course-details" course_id %}
+{% endblock %}

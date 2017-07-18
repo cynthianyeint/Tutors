@@ -1,0 +1,63 @@
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Teacher Name</th>
+        <th>Nick Name</th>
+        <th>Website</th>
+        <th>Class Title</th>
+        <th>Class Category</th>
+        <th>Description</th>
+        <th>Schedule</th>
+
+{#        <th></th>#}
+    </tr>
+    </thead>
+    <tbody>
+    {% for r in result_list %}
+    <tr>
+        <td>
+            {{ r.class_event_id }}
+        </td>
+        <td>
+            {{r.teacher}}
+        </td>
+        <td>
+            {{r.teacher.nickname}}
+        </td>
+        <td>
+            <a href="{{r.teacher.website}}" target="_blank">{{r.teacher.website}}</a>
+        </td>
+        <td>
+            {{ r.title }}
+        </td>
+        <td>
+            {{ r.category }}
+        </td>
+        <td>
+            {{ r.description }}
+        </td>
+        <td>
+            {% if r.get_class_schedule %}
+                {% for o in r.get_class_schedule %}
+                    {% if r.weekly_class_event %}
+                        {{ o.start_time|date:"l" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                    {% else %}
+                        {% if o.start_time.date == o.end_time.date %}
+                            {{ o.start_time|date:"j.m.y" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                        {% else %}
+                            {{ o.start_time|date:"j.m.y" }}({{ o.start_time|date:"P" }}) - {{ o.end_time|date:"j.m.y" }}({{ o.end_time|date:"P" }})<br>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </td>
+
+
+{#        <td>#}
+{#            <a class="btn btn-xs btn-danger" href="#"><i class="fa fa-times"></i> Delete</a>#}
+{#        </td>#}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

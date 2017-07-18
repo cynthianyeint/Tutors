@@ -1,0 +1,16 @@
+{% extends 'tutors/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block main %}
+    <div class="text-center alert alert-info">
+        You have requested a new activation email. Click "Resend" below to confirm.
+        <br/>
+        <br/>
+        <form id="form-resend-activation" action="" method="post">{% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ user_id }}"/>
+            <input class="btn btn-primary" type="submit" value="Resend"/>
+        </form>
+    </div>
+{% endblock %}

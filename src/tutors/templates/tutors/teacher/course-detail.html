@@ -1,0 +1,154 @@
+{% extends 'tutors/courses/base.html' %}
+{#{% extends 'tutors/base.html' %}#}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block title %}Course Details{% endblock %}
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% clear_breadcrumbs %}
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="top-session">
+                <div class="row" id="course">
+                    <div class="col-md-12">
+                        <h2><i class="fa fa-book"></i> {{ course }}</h2>
+                        <a href="{% url 'edit-course' course.id %}" class="btn btn-warning a-btn"><i class="fa fa-pencil"></i> Edit Course</a>
+{#                        <a href="{% url 'monthly-calendar' course.id 2017 07 %}" class="btn btn-primary a-btn"><i class="fa fa-plus-square"></i> Add Schedule</a>#}
+<a href="{% url 'monthly-calendar' course.id 2017 07 %}" class="btn btn-primary a-btn"><i class="fa fa-plus-square"></i> Add Schedule</a>
+                    </div>
+                </div>
+                <div class="row" id="course">
+                    <div class="col-md-10">
+                        <h4><a href="{% url 'course-details' course.id %}?year={{ monthly_data.last_month.year }}&month={{ monthly_data.last_month.month }}"><i class="fa fa-caret-left"></i> </a>
+                            {{ monthly_data.this_month|date:"F" }} {{ monthly_data.this_month|date:"Y" }}
+                            <a href="{% url 'course-details' course.id %}?year={{ monthly_data.next_month.year }}&month={{ monthly_data.next_month.month }}"><i class="fa fa-caret-right"></i> </a>
+                        </h4>
+                        <table class="table table-bordered course-calendar">
+                            <tr>
+                                <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+                            </tr>
+                            {% for row in monthly_data.calendar %}
+                                <tr>
+                                    {% for day, items in row %}
+                                        <td {% if items %}class="today" {% endif %}>
+                                            {% if day %}
+                                                <div class="day-ordinal">
+                                                    {{ day }}
+                                                </div>
+                                            {% endif %}
+                                            {% if items %}
+                                                {% for item in items %}
+                                                    {{ item.start_time|time }} - {{ item.end_time|time }}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% if course.get_pending_applications %}
+                    <div class="row" id="course" >
+                        <div class="col-md-12">
+                            <h2><i class="fa fa-file-text"></i> Pending Applications</h2>
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Application ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Date of Birth</th>
+                                        <th>Contact Number</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                {% for p in course.get_pending_applications %}
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ p.id }}</td>
+                                        <td>
+                                            <a href="{% url 'student-view' p.student.id %}">{{ p.student }}</a>
+                                        </td>
+                                        <td>{{ p.student.email }}</td>
+                                        <td>{{ p.student.dob }}</td>
+                                        <td>{{ p.student.get_phone_number }}</td>
+                                        <td>
+                                            <div class="icon" for="{{ p.id }}">
+                                                <a href="#" class="btn btn-sm btn-warning confirm-application" data-id="{{ p.id }}"><i class="fa fa-check"></i> Confirm</a>
+                                                <a href="#" class="btn btn-sm btn-danger reject-application" data-id="{{ p.id }}"><i class="fa fa-times"></i> Reject</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="row"id="course">
+                    <div class="col-md-10">
+                        {% if student_list %}
+                            <h2><i class="fa fa-users"></i> Students List</h2>
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Date of Birth</th>
+                                    <th>Contact Number</th>
+                                </tr>
+                                </thead>
+                                {% for s in student_list %}
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'student-view' s.id %}">{{ s }}</a>
+                                        </td>
+                                        <td>{{ s.email }}</td>
+                                        <td>{{ s.dob }}</td>
+                                        <td>{{ s.get_phone_number }}</td>
+                                    </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            <h2><i class="fa fa-exclamation-triangle"></i>No student list found.</h2>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% ifnotequal course.recommendation.count 0 %}
+                    <div class="row" id="course">
+                        <div class="col-md-10">
+                            <h2><i class="fa fa-thumbs-up"></i> Recommendations</h2>
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for s in course.recommendation.all %}
+                                    <tr>
+                                        <td><a href="{% url 'student-view' s.id %}">{{ s }}</a></td>
+                                        <td>{{ s.email }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endifnotequal %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

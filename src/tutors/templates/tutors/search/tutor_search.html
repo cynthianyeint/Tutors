@@ -1,0 +1,135 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block main %}
+<h3><i class="fa fa-search"></i> Search</h3>
+<div class="panel panel-default well">
+    <div class="panel-body">
+<form action="" method="get">
+    <div>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="control-label" for="id_custom_search">Custom Search</label>
+                <input type="search" class="form-control" tilte="Type your search" name="custom_search" id="id_custom_search" autofocus="true" {% if request.GET.custom_search %}value={{ request.GET.custom_search }}{% endif %} />
+            </div>
+            <div class="col-md-3">
+                <label class="control-label" for="id_search_nick_name">Nick Name</label><br/>
+                <input type="search" class="form-control" title="Nick Name" name="search_nick_name" id="id_search_nick_name" {% if request.GET.search_nick_name %}value={{ request.GET.search_nick_name }}{% endif %}>
+            </div>
+{#            <div class="col-md-3">#}
+{#                <label class="control-label" for="id_search_website">Website</label><br/>#}
+{#                <input type="search" class="form-control" title="Website" name="search_website" id="id_search_website" {% if request.GET.search_website %}value={{ request.GET.search_website }}{% endif %}>#}
+{#            </div>#}
+            <div class="col-md-3">
+                <label class="control-label" for="id_search_first_name">First Name</label><br/>
+                <input type="search" class="form-control" title="First Name" name="search_first_name" id="id_search_first_name" {% if request.GET.search_first_name %}value={{ request.GET.search_first_name }}{% endif %}>
+            </div>
+            <div class="col-md-3">
+                <label class="control-label" for="id_search_last_name">Last Name</label><br/>
+                <input type="search" class="form-control" title="Last Name" name="search_last_name" id="id_search_last_name" {% if request.GET.search_last_name %}value={{ request.GET.search_last_name }}{% endif %}>
+            </div>
+
+        </div><br/>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="search_from_date">Start Date</label>
+                    <div class='input-group date' id='from_date_datetimepicker'>
+                        <input type='text' class="form-control" placeholder="YYYY-MM-DD" id="id_dob" name="search_from_date" {% if request.GET.search_from_date %}value="{{ request.GET.search_from_date }}"{% endif %}/>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="search_to_date">End Date</label>
+                    <div class='input-group date' id='to_date_datetimepicker'>
+                        <input type='text' class="form-control" placeholder="YYYY-MM-DD" id="id_dob" name="search_to_date" {% if request.GET.search_to_date %}value="{{ request.GET.search_to_date }}"{% endif %}/>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+{#            <div class="col-md-3">#}
+{#                <div class="form-group">#}
+{#                    <label class="control-label" for="id_search_int_day">Int Day</label>#}
+{#                    <select name="search_int_day" class="form-control" id="id_search_int_day">#}
+{#                        <option value="">-------</option>#}
+{#                        {% for key, value in int_list %}#}
+{#                            <option value="{{ key }}" {% ifequal request.GET.search_int_day key|slugify %}selected="selected"{% endifequal %}>{{ value }}</option>#}
+{#                        {% endfor %}#}
+{#                    </select>#}
+{#                </div>#}
+{#            </div>#}
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label" for="id_search_from_time">Start Time</label>
+                    <select name="search_from_time" class="form-control" id="id_search_from_time">
+                        {% for key, value in time_list %}
+                            <option value="{{ key }}" {% ifequal key request.GET.search_from_time %}selected="selected" {% endifequal %}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label" for="id_search_to_time">End Time</label>
+                    <select name="search_to_time" class="form-control" id="id_search_to_time">
+                        {% for key, value in time_list %}
+                            <option value="{{ key }}" {% ifequal key request.GET.search_to_time %}selected="selected" {% endifequal %}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+{#            <div class="col-md-3">#}
+{#                <div class="form-group">#}
+{#                    <label for="search_dob">Date of Birth</label>#}
+{#                    <div class='input-group date' id='dob_datetimepicker'>#}
+{#                        <input type='text' class="form-control" placeholder="YYYY-MM-DD" id="id_dob" name="search_dob" {% if request.GET.search_dob %}value="{{ request.GET.search_dob }}"{% endif %}/>#}
+{#                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+            <div class="col-md-3">
+                <label class="control-label" for="id_search_class_title">Class Title</label><br/>
+                <input type="search" class="form-control" title="Class Title" name="search_class_title" id="id_search_class_title" {% if request.GET.search_class_title %}value={{ request.GET.search_class_title }}{% endif %}>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label" for="id_search_class_category_name">Class Category Name</label>
+                    <select name="search_class_category_name" class="form-control" id="id_search_class_category_name">
+                        <option value="">-------</option>
+                        {% for cat in class_cat_list %}
+                            <option value="{{ cat.id }}" {% ifequal request.GET.search_class_category_name cat.id|slugify %}selected="selected"{% endifequal %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="control-label" for="id_search_description">Description</label><br/>
+                <input type="search" class="form-control" title="Description" name="search_description" id="id_search_description" {% if request.GET.search_description %}value={{ request.GET.search_description }}{% endif %}>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="submit" style="float:right; margin-left: 5px" id="search-btn"><i class="fa fa-search"></i> Search</button>
+        </div>
+    </div>
+</form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3><i class="fa fa-search"></i> Search Result</h3>
+        {% if result_list %}
+        <div class="panel panel-info">
+            {% include 'tutors/search/tutor_search_result.html' %}
+        </div>
+        {% else %}
+            <h3 style="color:#592003" class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> No search result found.</h3>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

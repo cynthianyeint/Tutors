@@ -1,0 +1,2 @@
+Mezzanine==4.0.1
+python-social-auth==0.2.12

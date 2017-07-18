@@ -1,0 +1,51 @@
+{% extends 'tutors/courses/base.html' %}
+{#{% extends "tutors/base.html" %}#}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block title %}Daily Calendar{% endblock %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Monthly" "monthly-calendar" course_id current_datetime.year current_datetime.month %}
+    {% breadcrumb "Daily Calendar" "" %}
+{% endblock %}
+
+{% block main %}
+    <h3 class="page-header">Daily Calendar</h3>
+    <h4>
+        <a href="{% url 'daily-calendar' course_id prev_day.year prev_day.month prev_day.day %}"><i class="fa fa-caret-left"></i> </a>
+        {{ day|date:"l, N jS Y" }}
+        <a href="{% url 'daily-calendar' course_id next_day.year next_day.month next_day.day %}"><i class="fa fa-caret-right"></i> </a>
+    </h4>
+    <table class="table table-bordered calendar">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Course Event Title</th>
+{#                <th>Private 2</th>#}
+{#                <th>Private 3</th>#}
+{#                <th colspan="4">Private 4</th>#}
+            </tr>
+        </thead>
+        <tbody>
+            {% for tm,cells in timeslots %}
+            <tr>
+                {% if course.class_event %}
+                    <th><a href="{% url 'course-schedule_view' course.id course.class_event.id %}?dtstart={{ tm.isoformat }}">{{ tm|date:"P" }}</a> </th>
+                {% else %}
+                    <th><a href="{% url 'add-course-schedule' course_id%}?dtstart={{ tm.isoformat }}">{{ tm|date:"P" }}</a> </th>
+                {% endif %}
+                <td>
+                    {% for cell in cells %}{{ cell }}{% endfor %}
+                </td>
+
+{#                {% for cell in cells %}#}
+{#                    <td{% if cell.event_class %} class="{{cell.event_class}}"{% endif %}>{{ cell }}</td>#}
+{#                {% endfor %}#}
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

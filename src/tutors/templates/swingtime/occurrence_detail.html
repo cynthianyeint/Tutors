@@ -1,0 +1,48 @@
+{% extends 'tutors/courses/base.html' %}
+{#{% extends "tutors/base.html" %}#}
+{% block title %}Edit Schedule{% endblock %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs%}
+    {{ block.super }}
+    {% breadcrumb "Monthly" "monthly-calendar" course_id current_datetime.year current_datetime.month %}
+    {% breadcrumb "Edit Schedule" "" %}
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="page-header">Edit Schedule</h1>
+            <form action="" method="post">{% csrf_token %}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <b>{{ form.start_time.label }}:</b>
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.start_time }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <b>{{ form.end_time.label }}:</b>
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.end_time }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6" align="center">
+                            <button class="btn btn-warning btn-sm" type="submit" name="_update" ><i class="fa fa-pencil"></i> Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

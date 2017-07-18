@@ -1,0 +1,66 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load has_group %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="top-session">
+                <div class="row">
+                    <div class="col-md-2" style="margin-top: 10px;">
+                        {% if request.user|has_group:"Teacher" and application.teacher.avatar_url %}
+                            <img src="{{ application.teacher.avatar_url }}" width="140px" height="140px">
+                        {% elif request.user|has_group:"Student" and application.student.avatar_url %}
+                            <img src="{{ application.student.avatar_url }}" width="140px" height="140px">
+                        {% else %}
+                            <img src="/static/img/user_profile.jpg">
+                        {% endif %}
+
+                        {% if request.user|has_group:"Teacher" %}
+                            <div style="color:#00b2d6; margin: 5px;">No. of Students: 0</div>
+                            <div style="color:#00b2d6; margin: 5px;">No.of Classes: {{ total_course }} </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="col-md-10" style="margin-top: 10px;">
+                        <h2><i class="fa fa-book"></i> Course Application ID: {{ application.id }}</h2>
+                        <table class="table table-borderless" id="confirm_table">
+                            <tr>
+                                <td><b>Applicant Name:</b></td>
+                                <td>{{ application.student }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Course ID:</b></td>
+                                <td>{{ application.course.id }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Course Title:</b></td>
+                                <td>{{ application.course }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Application Status:</b></td>
+                                <td>
+                                    <span id="id_status">{{ application.status }}</span>
+                                    <br><br>
+
+                                    {% if request.user|has_group:"Teacher" %}
+                                        <a href="{% url 'teacher_dashboard' %}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
+
+{#                                        {% if application.status == 'Pending' %}#}
+{#                                            <a href="#" class="btn btn-warning" id="confirm-course"><i class="fa fa-check-circle"></i> Confirm</a>#}
+{#                                        {% endif %}#}
+
+                                    {% else %}
+                                        <a href="{% url 'student_dashboard' %}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
+                                    {% endif %}
+
+                                    <input type="hidden" id="application_id" value="{{ application.id }}">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

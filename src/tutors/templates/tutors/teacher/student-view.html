@@ -1,0 +1,82 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block main %}
+<div class="row">
+    <h1 class="page-header" style="padding: 10px;">{{ student }}</h1>
+    <div class="col-md-2">
+        {% if student.avatar_url %}
+            <img src="{{ student.avatar_url }}" width="140px" height="140px">
+        {% else %}
+            <img src="/static/img/user_profile.jpg">
+        {% endif %}
+    </div>
+    <div class="col-md-10">
+        <h2><i class="fa fa-user"></i> Profile Overview</h2>
+        <table class="table table-borderless">
+            <tr>
+                <td><b>Full Name:</b></td>
+                <td>{{ student }}</td>
+            </tr>
+            <tr>
+                <td><b>Email:</b></td>
+                <td>{{ student.email }}</td>
+            </tr>
+            <tr>
+                <td><b>Date of Birth:</b></td>
+                <td>{{ student.dob }}</td>
+            </tr>
+            <tr>
+                <td><b>Phone Number:</b></td>
+                <td>{{ student.get_phone_number }}</td>
+            </tr>
+        </table>
+
+        <h2><i class="fa fa-book"></i> List of Attending Courses</h2>
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Course Title</th>
+                    <th>Category</th>
+                    <th>Schedule</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for course in student.course %}
+                <tr>
+                    <td>
+                        {{ course.title }}
+                    </td>
+                    <td>
+                        {{ course.category }}
+                    </td>
+                    <td>
+                        {% if course.get_class_schedule %}
+                            {% for o in course.get_class_schedule %}
+                                {% if course.weekly_class_event %}
+                                    {{ o.start_time|date:"l" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                                {% else %}
+                                    {% if o.start_time.date == o.end_time.date %}
+                                        {{ o.start_time|date:"j.m.y" }} ({{ o.start_time|date:"P" }} - {{ o.end_time|date:"P" }})<br>
+                                    {% else %}
+                                        {{ o.start_time|date:"j.m.y" }}({{ o.start_time|date:"P" }}) - {{ o.end_time|date:"j.m.y" }}({{ o.end_time|date:"P" }})<br>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <i class="fa fa-thumbs-up text-primary"></i><span>{{ course.recommendation.count }}</span>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

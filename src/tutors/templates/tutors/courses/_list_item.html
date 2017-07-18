@@ -1,0 +1,47 @@
+{#<li class="course-list-row">#}
+{#    <a href="{%  url 'courses-detail' c.id %}">#}
+{#        <span class="course-title">#}
+{#            <i class="fa fa-book"></i> {{ c.title }}#}
+{#        </span>#}
+{#    </a>#}
+{#    by#}
+{#    <a href="" class="teacher-name">#}
+{#        {{ c.teacher.fullname }}#}
+{#    </a>#}
+{#</li>#}
+
+<li class="course-list-row">
+    <div class="teacher-profile-pic">
+        {% if c.teacher.avatar_url %}
+            <img src="{{ c.teacher.avatar_url }}"/>
+        {% else %}
+            <img src="/static/img/user_profile.jpg"/>
+        {% endif %}
+
+        {# this also works: <img src="{{ c.teacher.user.userprofile_set.first.avatar.url }}"/> #}
+    </div>
+    <div class="course-list-details">
+            <h2>
+                <a href="{% url 'courses-detail' c.pk %}">{{ c.title }}</a>
+                <span class="course-list-teacher">by <a href="{% url 'teacher-view' c.teacher.id %}">{{ c.teacher }}</a>
+                </span>
+            </h2>
+        <span class="course-list-category">{{ c.category }}</span>
+        <div class="course-list-subtitle">
+            <div class="course-list-subtitle-item">
+                <i class="fa fa-fw fa-thumbs-up text-primary"></i> <span>{% ifnotequal c.recommendation.count 0 %}{{ c.recommendation.count }}{% endifnotequal %}</span>
+            </div>
+
+            <div class="course-list-subtitle-item">
+                <i class="fa fa-fw fa-calendar text-primary"></i>
+                <span class="course-day {% if c.day_mon %}selected{% endif %}">M</span>
+                <span class="course-day {% if c.day_tue %}selected{% endif %}">T</span>
+                <span class="course-day {% if c.day_wed %}selected{% endif %}">W</span>
+                <span class="course-day {% if c.day_thu %}selected{% endif %}">T</span>
+                <span class="course-day {% if c.day_fri %}selected{% endif %}">F</span>
+                <span class="course-day {% if c.day_sat %}selected{% endif %}">S</span>
+                <span class="course-day {% if c.day_sun %}selected{% endif %}">S</span>
+            </div>
+        </div>
+    </div>
+</li>

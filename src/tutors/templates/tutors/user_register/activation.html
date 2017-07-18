@@ -1,0 +1,7 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block main %}<br/>
+{{ message }}
+Please <a href="{% url 'user-login' %}" >login</a> to enjoy our system.
+{% endblock %}

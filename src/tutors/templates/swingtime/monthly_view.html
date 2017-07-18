@@ -1,0 +1,56 @@
+{% extends 'tutors/courses/base.html' %}
+{#{% extends "tutors/base.html" %}#}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block title %}Monthly Calendar{% endblock %}
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Monthly Calendar" "monthly-calendar" course_id current_datetime.year current_datetime.month %}
+{% endblock %}
+
+
+{% block main %}
+    <h3 class="page-header">Monthly Calendar</h3>
+    <h4>
+        <a href="{% url 'monthly-calendar' course_id last_month.year last_month.month %}"><i class="fa fa-caret-left"></i> </a>
+        {{ this_month|date:"F" }} {{ this_month|date:"Y" }}
+        <a href="{% url 'monthly-calendar' course_id next_month.year next_month.month %}"><i class="fa fa-caret-right"></i> </a>
+    </h4>
+
+    <table class="table table-bordered month-view">
+        <thead>
+            <tr>
+                <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in calendar %}
+            <tr>
+                {% for day,items in row  %}
+                <td{% ifequal day today.day  %} class="today"{% endifequal %}>
+                {% if day %}
+                    <div class="day-ordinal">
+                        <a href="{% url 'daily-calendar' course_id this_month.year this_month.month day %}">{{ day }}</a>
+                    </div>
+                    {% if items %}
+                    <ul>
+                        {% for item in items %}
+                        <li>
+                            <a href="{{ item.get_absolute_url }}">
+                                <span class="event-times">{{ item.start_time|time }}</span>
+                                {{ item.title }}</a>
+
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

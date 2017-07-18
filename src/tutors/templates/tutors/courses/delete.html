@@ -1,0 +1,12 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block main %}<br/>
+<form action="" method="post">{% csrf_token %}
+    Are you sure you want to delete the Course "<b>{{ object.title }}</b>"?
+    <br/>
+    <br/>
+    <button type="submit" value="Confirm" class="btn btn-danger"><i class="fa fa-trash"></i> Confirm</button>
+    <a href="{% url 'teacher_dashboard' %}" class="btn btn-default"><i class="fa fa-ban"></i> Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'tutors/base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load i18n %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        {# Newest Courses #}
+        <h2 class="page-header course-page-header">{% trans 'Newest Courses' %}</h2>
+        <ul id="" class="course-list">
+            {% for c in newest_course_list %}
+                {% include "tutors/courses/_list_item.html" %}
+            {%  endfor %}
+        </ul>
+
+        {# Popular Courses #}
+        <h2 class="page-header course-page-header">{% trans 'Popular Courses' %}</h2>
+        <ul class="course-list">
+            {% for c in popular_course_list %}
+                {% include "tutors/courses/_list_item.html" %}
+            {%  endfor %}
+        </ul>
+
+    </div>
+</div>
+{% endblock %}
